@@ -17,19 +17,19 @@ type Record interface {
 	String() string
 }
 
-type Vertex struct {
+type Node struct {
 
 }
 
-func (v Vertex) String() string {
+func (n Node) String() string {
 	panic("implement me")
 }
 
-type Edge struct {
+type Relationship struct {
 
 }
 
-func (e Edge) String() string {
+func (r Relationship) String() string {
 	panic("implement me")
 }
 
