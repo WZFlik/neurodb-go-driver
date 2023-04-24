@@ -12,7 +12,6 @@ import (
 	"testing"
 )
 
-// TODO Hoss The development has not been completed, and the test case cannot pass
 func TestDriver(t *testing.T) {
 	db, err := neurodb.Open("127.0.0.1", 8839)
 	if err != nil {
@@ -42,5 +41,4 @@ func TestDriver(t *testing.T) {
 		record := resultSet.Record()
 		fmt.Println(record)
 	}
-
 }
