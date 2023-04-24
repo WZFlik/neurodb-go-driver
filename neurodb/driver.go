@@ -6,9 +6,9 @@
 package neurodb
 
 import (
+	"neurodb.org/dbtype"
 	"sync"
 )
-
 
 type NeuroDBDriver struct {
 	conn  NeuroDBConn
@@ -23,11 +23,11 @@ func Open(addr string, port int) (*NeuroDBDriver, error) {
 	driver := &NeuroDBDriver{
 		conn: conn,
 	}
-	return driver,nil
+	return driver, nil
 
 }
 
-func (n *NeuroDBDriver)ExecuteQuery(query string) (ResultSet,error) {
+func (n *NeuroDBDriver) ExecuteQuery(query string) (dbtype.ResultSet, error) {
 	n.mutex.Lock()
 	defer n.mutex.Unlock()
 	resultSet, err := n.conn.SendRecv([]byte(query))
