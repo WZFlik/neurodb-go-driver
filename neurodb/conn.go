@@ -1,4 +1,3 @@
-// Package net
 // @author  Hoss
 // @contact hth146@163.com
 // @time    2023/4/23
@@ -7,6 +6,7 @@ package neurodb
 
 import (
 	"net"
+	"neurodb.org/dbtype"
 	"strconv"
 	"strings"
 	"sync"
@@ -18,19 +18,8 @@ const (
 
 // A connection of neurodb, it's thread safe
 type NeuroDBConn interface {
-	SendRecv(msg []byte) (ResultSet, error)
+	SendRecv(msg []byte) (dbtype.ResultSet, error)
 	Close() error
-}
-
-type msgBuffer struct {
-	Buf []byte
-}
-
-// always for receive message
-func newMsgBuffer(bufSize int) *msgBuffer {
-	return &msgBuffer{
-		Buf: make([]byte, bufSize),
-	}
 }
 
 type neuroDBConn struct {
@@ -69,33 +58,33 @@ func (n *neuroDBConn) send(msg []byte) error {
 	return nil
 }
 
-func (n *neuroDBConn) recv() (ResultSet, error) {
+func (n *neuroDBConn) recv() (dbtype.ResultSet, error) {
 	tp, err := n.readByte()
 	if err != nil {
 		return nil, err
 	}
-	resultSet := NewResult()
+	resultSet := dbtype.NewResult()
 
 	switch MsgHeadType(tp) {
 	case MsgTypeParseOk: // @
-		resultSet.status = ParseOk
+		resultSet.Status = ParseOk
 	case MsgTypeSetMsg1, MsgTypeSetMsg2: // $
 		line, err := n.readLine()
 		if err != nil {
 			return nil, err
 		}
-		resultSet.msg = line
+		resultSet.Msg = line
 	case MsgTypeParseObject:
 		line, err := n.readLine()
 		if err != nil {
 			return nil, err
 		}
 		head := strings.Split(line, ",")
-		err = resultSet.parseInfo(head)
+		err = resultSet.ParseInfo(head)
 		if err != nil {
 			return nil, err
 		}
-		body, err := n.readBytes(resultSet.bodyLen)
+		body, err := n.readBytes(resultSet.BodyLen)
 		if err != nil {
 			return nil, err
 		}
@@ -105,7 +94,10 @@ func (n *neuroDBConn) recv() (ResultSet, error) {
 			return nil, err
 		}
 		_ = line
-		resultSet.recordSet = decodeRecordSet(string(body))
+		resultSet.RecordSet, err = DeserializeRecordSet(body)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	return resultSet, nil
@@ -117,7 +109,7 @@ func (n *neuroDBConn) readLine() (string, error) {
 	for {
 		_, err := n.tcp.Read(charBuf)
 		if err != nil {
-			return "",err
+			return "", err
 		}
 		str = append(str, charBuf[0])
 		if charBuf[0] == '\n' {
@@ -149,7 +141,7 @@ func (n *neuroDBConn) readByte() (byte, error) {
 }
 
 // return a ResultSet or an error
-func (n *neuroDBConn) SendRecv(msg []byte) (ResultSet, error) {
+func (n *neuroDBConn) SendRecv(msg []byte) (dbtype.ResultSet, error) {
 	n.mutex.Lock()
 	defer n.mutex.Unlock()
 	err := n.send(msg)
