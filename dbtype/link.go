@@ -6,25 +6,6 @@ package dbtype
 
 import "fmt"
 
-type prop map[string]*ColVal
-type strAry []string
-
-func (s strAry) String() string {
-	str := "<"
-	for _, v := range s {
-		str += fmt.Sprintf("%v ", v)
-	}
-	return str + ">"
-}
-
-func (p prop) String() string {
-	str := ""
-	for k, v := range p {
-		str += fmt.Sprintf("%v:%v ", k, v)
-	}
-	return str
-}
-
 type Link struct {
 	ID          int64
 	StartNodeId int64
@@ -39,6 +20,6 @@ func NewLinks(ID int64, startNodeId int64, endNodeId int64, typ string, properti
 
 func (l Link) String() string {
 	str := fmt.Sprintf("[ID:%d,StartNodeId:%d,EndNodeId:%d,Type:%s:properties:%v]",
-		l.ID, l.StartNodeId, l.EndNodeId, l.Type, prop(l.properties))
+		l.ID, l.StartNodeId, l.EndNodeId, l.Type, l.properties)
 	return str
 }

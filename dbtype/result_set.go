@@ -24,8 +24,10 @@ const (
 )
 
 type ResultSet interface {
+	RecordSet()*RecordSet
 	Next() bool
-	Record() (interface{}, error)
+	Record() Record
+	Err() error // 迭代过程中判断Error
 }
 
 type ResultInfo struct {
@@ -39,7 +41,7 @@ type ResultInfo struct {
 	DeleteNodes int
 	DeleteLinks int
 	Msg         string
-	BodyLen     int
+	firstErr error
 }
 
 func NewResult() *resultSet {
@@ -48,16 +50,27 @@ func NewResult() *resultSet {
 
 type resultSet struct {
 	ResultInfo
-	RecordSet *RecordSet
+	Data     *RecordSet
+	firstErr error
+}
+
+
+func (r *resultSet) RecordSet() *RecordSet {
+	return r.Data
 }
 
 func (r *resultSet) Next() bool {
-	panic("implement me")
+	return r.Data.Next()
 }
 
-func (r *resultSet) Record() (interface{}, error) {
-	panic("implement me")
+func (r *resultSet) Record() Record {
+	return r.Data.Record()
 }
+
+func (r *resultSet) Err() error {
+	return r.Data.Err()
+}
+
 
 func (r *resultSet) ParseInfo(head []string) error {
 	//HeadIndexStatus = 0
@@ -116,13 +129,6 @@ func (r *resultSet) ParseInfo(head []string) error {
 	//HeadIndexDeleteLinks // 8
 	deleteLinks, err := strconv.Atoi(head[HeadIndexDeleteLinks])
 	r.DeleteLinks = deleteLinks
-	if err != nil {
-		return err
-	}
-
-	//HeadIndexDeleteLinks // 8
-	bodyLen, err := strconv.Atoi(head[HeadIndexBodyLen])
-	r.BodyLen = bodyLen
 	if err != nil {
 		return err
 	}

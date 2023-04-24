@@ -43,7 +43,7 @@ func DeserializeRecordSet(s []byte) (*dbtype.RecordSet, error) {
 		recordSet.Links[i] = l
 	}
 	/*读取return结果集列表*/
-	if buffer.DeserializeTypeU1() != NEURODB_RECORD {
+	if buffer.DeserializeTypeU1() != NEURODB_RECORDS {
 		return nil, ErrUnknownType
 	}
 	recordsCnt := buffer.DeserializeUint()
@@ -158,7 +158,7 @@ func (m *msgBuffer) DeserializeTypeU1() byte {
 }
 
 func (m *msgBuffer) check() {
-	if m.offset >= len(m.Buf)-1 {
+	if m.offset > len(m.Buf)-1 {
 		err := fmt.Errorf("msg buffer out of range offset:%d", m.offset)
 		panic(err)
 	}
@@ -220,7 +220,8 @@ func (m *msgBuffer) DeserializeLabels(labels []string) []string {
 	listLen := m.DeserializeUint()
 	l := make([]string, listLen)
 	for i := 0; i < listLen; i++ {
-		l[i] = labels[i]
+		idx := m.DeserializeUint()
+		l[i] = labels[idx]
 	}
 	return l
 }

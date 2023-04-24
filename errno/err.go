@@ -13,6 +13,9 @@ var (
 	NoMemErr  = NewNeuroError(2,"No_MEM_ERR")
 	SyntaxErr = NewNeuroError(3,"SYNTAX_ERR")
 	// todo Hoss more error 3 - 29
+
+	// iterator ResultSet Error when traversal data
+	ErrResultSetEmpty = NewNeuroError(999,"Has no next record")
 )
 
 type NeuroErrr struct {

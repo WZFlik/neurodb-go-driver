@@ -22,7 +22,17 @@ func NewColVal() *ColVal {
 	return &ColVal{}
 }
 
-func (c ColVal) String() string {
-	str := fmt.Sprintf("val:%v,Type:%d", toString(c.Val), c.Type)
-	return str
+func (c *ColVal) String() string {
+	if c.Val == nil {
+		return "nil"
+	}
+	val := c.Val
+	switch val.(type) {
+	case *Node:
+		return val.(*Node).String()
+	case *Link:
+		return val.(*Link).String()
+	default:
+		return fmt.Sprintf("%v",val)
+	}
 }

@@ -19,20 +19,28 @@ func TestDriver(t *testing.T) {
 		t.Error(err)
 	}
 
-	resultSet ,err := db.ExecuteQuery("match (n) return n")
+	resultSet, err := db.ExecuteQuery("match (n) return n")
 	if err != nil {
 		t.Error(err)
 	}
 	for resultSet.Next() {
-		fmt.Println(resultSet.Record())
+		if err := resultSet.Err(); err != nil {
+			panic(err)
+		}
+		record := resultSet.Record()
+		fmt.Println(record)
 	}
-	resultSet,err = db.ExecuteQuery("match (n)-[r]->(m) return n,r,m")
+	resultSet, err = db.ExecuteQuery("match (n)-[r]->(m) return n,r,m")
 
 	if err != nil {
 		t.Error(err)
 	}
 	for resultSet.Next() {
-		fmt.Println(resultSet.Record())
+		if err := resultSet.Err(); err != nil {
+			panic(err)
+		}
+		record := resultSet.Record()
+		fmt.Println(record)
 	}
 
 }

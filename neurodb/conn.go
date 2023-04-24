@@ -84,7 +84,13 @@ func (n *neuroDBConn) recv() (dbtype.ResultSet, error) {
 		if err != nil {
 			return nil, err
 		}
-		body, err := n.readBytes(resultSet.BodyLen)
+		//HeadIndexDeleteLinks // 8
+		bodyLen, err := strconv.Atoi(head[dbtype.HeadIndexBodyLen])
+		if err != nil {
+			return nil,err
+		}
+
+		body, err := n.readBytes(bodyLen)
 		if err != nil {
 			return nil, err
 		}
@@ -94,7 +100,7 @@ func (n *neuroDBConn) recv() (dbtype.ResultSet, error) {
 			return nil, err
 		}
 		_ = line
-		resultSet.RecordSet, err = DeserializeRecordSet(body)
+		resultSet.Data, err = DeserializeRecordSet(body)
 		if err != nil {
 			return nil, err
 		}

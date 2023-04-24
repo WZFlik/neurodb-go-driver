@@ -4,17 +4,30 @@
 
 package dbtype
 
+type Record []*ColVal
+
+func (r Record)String() string {
+	str := ""
+	for i, colVal := range r {
+		str += colVal.String()
+		if i != len(r) - 1 {
+			str+= ","
+		}
+	}
+	return str
+}
 type RecordSet struct {
 	Labels   []string
 	Types    []string
 	KeyNames []string
 	Nodes    []*Node
 	Links    []*Link
-	Records  [][]*ColVal
+	Records  []Record
+	rcdOffset int
 }
 
-func (s RecordSet) GetNodeById(id int64) *Node {
-	for _, node := range s.Nodes {
+func (r *RecordSet) GetNodeById(id int64) *Node {
+	for _, node := range r.Nodes {
 		if node.ID == id {
 			return node
 		}
@@ -22,8 +35,8 @@ func (s RecordSet) GetNodeById(id int64) *Node {
 	return nil
 }
 
-func (s RecordSet) GetLinkById(id int64) *Link {
-	for _, link := range s.Links {
+func (r *RecordSet) GetLinkById(id int64) *Link {
+	for _, link := range r.Links {
 		if link.ID == id {
 			return link
 		}
@@ -32,5 +45,23 @@ func (s RecordSet) GetLinkById(id int64) *Link {
 }
 
 func NewRecordSet() *RecordSet {
-	return &RecordSet{}
+	return &RecordSet{rcdOffset: -1}
+}
+
+func (r *RecordSet)Next()bool  {
+	size := len(r.Records)
+	if size > 0 && r.rcdOffset + 1 < size {
+		r.rcdOffset++
+			return true
+	}
+	return false
+}
+
+func (r *RecordSet)Record() Record  {
+	return r.Records[r.rcdOffset]
+}
+
+func (r*RecordSet)Err()error  {
+	// TODO 连接可能会不停迭代数据，此接口用于判断错误
+	return nil
 }

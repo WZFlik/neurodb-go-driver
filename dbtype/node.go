@@ -14,16 +14,6 @@ type Node struct {
 
 func (n Node) String() string {
 	str := fmt.Sprintf("[ID:%d,Labels:%v,Properties:%v]",
-		n.ID, toString(n.Labels), toString(n.Properties))
+		n.ID, n.Labels, n.Properties)
 	return str
-}
-
-func toString(val interface{}) string {
-	switch val.(type) {
-	case map[string]*ColVal:
-		return prop(val.(map[string]*ColVal)).String()
-	case []string:
-		return strAry(val.([]string)).String()
-	}
-	return "#!$"
 }
