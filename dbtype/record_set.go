@@ -4,7 +4,6 @@
 
 package dbtype
 
-// TODO Hoss all data type entity need to implements  NeuroEntiry interface{} ,contains int string float  Link Node and so on
 type RecordSet struct {
 	Labels   []string
 	Types    []string

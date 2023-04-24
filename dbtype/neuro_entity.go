@@ -5,6 +5,7 @@
 
 package dbtype
 
-type NeuroEntiry interface {
+// TODO Hoss all data type entity need to implements  Record interface{} ,contains int string float  Link Node and so on
+type Record interface {
 	String() string
 }

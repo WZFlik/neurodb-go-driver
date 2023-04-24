@@ -4,6 +4,10 @@
 
 package dbtype
 
+import (
+	"fmt"
+)
+
 type ColVal struct {
 	Val    interface{}
 	Type   int
@@ -16,4 +20,9 @@ func (c ColVal) GetNum() int64 {
 
 func NewColVal() *ColVal {
 	return &ColVal{}
+}
+
+func (c ColVal) String() string {
+	str := fmt.Sprintf("val:%v,Type:%d", toString(c.Val), c.Type)
+	return str
 }
