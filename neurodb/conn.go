@@ -5,8 +5,8 @@
 package neurodb
 
 import (
+	"github.com/WZFlik/neurodb-go-driver/dbtype"
 	"net"
-	"neurodb.org/dbtype"
 	"strconv"
 	"strings"
 	"sync"
@@ -87,7 +87,7 @@ func (n *neuroDBConn) recv() (dbtype.ResultSet, error) {
 		//HeadIndexDeleteLinks // 8
 		bodyLen, err := strconv.Atoi(head[dbtype.HeadIndexBodyLen])
 		if err != nil {
-			return nil,err
+			return nil, err
 		}
 
 		body, err := n.readBytes(bodyLen)
