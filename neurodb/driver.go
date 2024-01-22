@@ -6,7 +6,7 @@
 package neurodb
 
 import (
-	"neurodb.org/dbtype"
+	"github.com/WZFlik/neurodb-go-driver/dbtype"
 	"sync"
 )
 

@@ -5,6 +5,29 @@ neurodb golang驱动
 # 版本：
 
 ​	v0.0.1
+# 修复问题
+1.修正driver module name 修复获取 driver源码时出现module定义路径不匹配的问题
+
+# 使用方式
+- go get github.com/WZFlik/neurodb-go-driver
+- import "github.com/WZFlik/neurodb-go-driver/neurodb"
+- 开始编码
+```go
+   package main
+
+import "github.com/WZFlik/neurodb-go-driver/neurodb"
+
+func main() {
+	db, err := neurodb.Open("127.0.0.1", 8839)
+	if err != nil {
+		panic(err)
+	}
+	resultSet, err := db.ExecuteQuery("match (n) return n")
+	//traversal resultSet
+	_ = resultSet
+}
+
+```
 
 ## 示例代码
 

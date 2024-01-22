@@ -3,7 +3,7 @@ package neurodb
 import (
 	"errors"
 	"fmt"
-	"neurodb.org/dbtype"
+	"github.com/WZFlik/neurodb-go-driver/dbtype"
 	"strconv"
 	"unicode"
 )
