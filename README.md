@@ -4,8 +4,10 @@ neurodb golang驱动
 
 # 版本：
 
-​	v0.0.1
-
+​	v0.0.2
+修复问题
+1.修正driver module name
+使用 go get github.com/WZFlik/neurodb-go-driver 获取 driver源码时出现module定义路径不匹配的问题
 ## 示例代码
 
 ```go

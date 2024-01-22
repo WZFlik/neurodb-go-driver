@@ -8,7 +8,7 @@ package tests
 
 import (
 	"fmt"
-	"neurodb.org/neurodb"
+	"github.com/WZFlik/neurodb-go-driver/neurodb"
 	"testing"
 )
 
