@@ -4,6 +4,7 @@ neurodb golang驱动
 
 # 版本：
 
+
 ​	v0.0.1
 # 修复问题
 1.修正driver module name 修复获取 driver源码时出现module定义路径不匹配的问题
@@ -95,11 +96,8 @@ func TestDriver(t *testing.T) {
 
 ```
 
-# 使用
-
-使用 go get命令或者下载源码使用
 
 # 更多信息
 
-[neurodb官网](http://neurodb.org/)
+见[neurodb官网](http://neurodb.org/)
 
