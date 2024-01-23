@@ -24,7 +24,7 @@ const (
 )
 
 type ResultSet interface {
-	RecordSet()*RecordSet
+	RecordSet() *RecordSet
 	Next() bool
 	Record() Record
 	Err() error // 迭代过程中判断Error
@@ -41,7 +41,7 @@ type ResultInfo struct {
 	DeleteNodes int
 	DeleteLinks int
 	Msg         string
-	firstErr error
+	firstErr    error
 }
 
 func NewResult() *resultSet {
@@ -54,7 +54,6 @@ type resultSet struct {
 	firstErr error
 }
 
-
 func (r *resultSet) RecordSet() *RecordSet {
 	return r.Data
 }
@@ -63,6 +62,8 @@ func (r *resultSet) Next() bool {
 	return r.Data.Next()
 }
 
+// 返回一行记录，按照cypher指令后面的类型排序
+// match (n)-[r]->(m) return n,r,m， 则record包含了 Node(n)、Link(r)、Node(m)，这三个组成一条记录
 func (r *resultSet) Record() Record {
 	return r.Data.Record()
 }
@@ -70,7 +71,6 @@ func (r *resultSet) Record() Record {
 func (r *resultSet) Err() error {
 	return r.Data.Err()
 }
-
 
 func (r *resultSet) ParseInfo(head []string) error {
 	//HeadIndexStatus = 0

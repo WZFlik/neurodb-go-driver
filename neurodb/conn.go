@@ -74,7 +74,7 @@ func (n *neuroDBConn) recv() (dbtype.ResultSet, error) {
 			return nil, err
 		}
 		resultSet.Msg = line
-	case MsgTypeParseObject:
+	case MsgTypeParseObject: // *
 		line, err := n.readLine()
 		if err != nil {
 			return nil, err

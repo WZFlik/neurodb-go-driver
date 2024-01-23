@@ -5,24 +5,37 @@
 package dbtype
 
 type Record []*ColVal
+type Path []interface{}
 
-func (r Record)String() string {
+func (r Record) String() string {
 	str := ""
 	for i, colVal := range r {
 		str += colVal.String()
-		if i != len(r) - 1 {
-			str+= ","
+		if i != len(r)-1 {
+			str += ","
 		}
 	}
 	return str
 }
+
+func (r Record) ColSize() int {
+	return len(r)
+}
+
+func (r Record) Col(i int) *ColVal {
+	if i > len(r) {
+		return nil
+	}
+	return r[i]
+}
+
 type RecordSet struct {
-	Labels   []string
-	Types    []string
-	KeyNames []string
-	Nodes    []*Node
-	Links    []*Link
-	Records  []Record
+	Labels    []string
+	Types     []string
+	KeyNames  []string
+	Nodes     []*Node
+	Links     []*Link
+	Records   []Record
 	rcdOffset int
 }
 
@@ -48,20 +61,20 @@ func NewRecordSet() *RecordSet {
 	return &RecordSet{rcdOffset: -1}
 }
 
-func (r *RecordSet)Next()bool  {
+func (r *RecordSet) Next() bool {
 	size := len(r.Records)
-	if size > 0 && r.rcdOffset + 1 < size {
+	if size > 0 && r.rcdOffset+1 < size {
 		r.rcdOffset++
-			return true
+		return true
 	}
 	return false
 }
 
-func (r *RecordSet)Record() Record  {
+func (r *RecordSet) Record() Record {
 	return r.Records[r.rcdOffset]
 }
 
-func (r*RecordSet)Err()error  {
+func (r *RecordSet) Err() error {
 	// TODO 连接可能会不停迭代数据，此接口用于判断错误
 	return nil
 }
